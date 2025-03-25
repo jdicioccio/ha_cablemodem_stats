@@ -1,0 +1,11 @@
+{
+  "domain": "ha_cablemodem_stats",
+  "name": "Xfinity Cable Modem Stats",
+  "codeowners": ["@jdicioccio"],
+  "config_flow": true,
+  "documentation": "https://github.com/jdicioccio/ha_cablemodem_stats",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/jdicioccio/ha_cablemodem_stats",
+  "requirements": ["aiohttp", "beautifulsoup4>=4.9.3"],
+  "version": "1.0.0"
+} 

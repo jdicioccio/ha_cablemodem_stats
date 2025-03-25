@@ -1,0 +1,26 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "host": "Host",
+                    "model": "Model",
+                    "username": "Username",
+                    "password": "Password",
+                    "ssl": "Use SSL",
+                    "scan_interval": "Update interval (seconds)"
+                },
+                "description": "Set up your Arris/Motorola cable modem to monitor its statistics. The update interval must be at least 60 seconds.",
+                "title": "Arris/Motorola Cable Modem"
+            }
+        }
+    }
+} 
