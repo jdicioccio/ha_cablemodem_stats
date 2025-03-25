@@ -224,12 +224,12 @@ class ArrisModemSensor(CoordinatorEntity, SensorEntity):
         self.entity_description = description
         self._channel = channel
         self._direction = direction
-        self._attr_name = f"{direction} Ch.{channel} {description.name}"
-        self._attr_unique_id = f"{coordinator.host}_{direction}_{channel}_{description.key}"
+        self._attr_name = f"{direction} {description.name} Ch.{channel}"
+        self._attr_unique_id = f"{coordinator.host}_{direction}_{description.key}_{channel}"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, coordinator.host)},
-            "name": f"Arris Modem {coordinator.model}",
-            "manufacturer": "Arris",
+            "name": f"Cable Modem {coordinator.model}",
+            "manufacturer": "Xfinity",
             "model": coordinator.model,
         }
         _LOGGER.debug("Created sensor %s", self._attr_name)
