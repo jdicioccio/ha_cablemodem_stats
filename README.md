@@ -60,6 +60,10 @@ For each upstream channel:
 3. If you have connection issues, try disabling SSL
 4. Check the Home Assistant logs for detailed error messages
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a list of changes and new features.
+
 ## Credits
 
 This integration is based on the [cablemodem_stats](https://github.com/jdicioccio/cablemodem_stats) project. 
