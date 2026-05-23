@@ -134,15 +134,11 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         config_entry: config_entries.ConfigEntry,
     ) -> OptionsFlowHandler:
         """Create the options flow for this integration."""
-        return OptionsFlowHandler(config_entry)
+        return OptionsFlowHandler()  # Do not pass config_entry - it is injected by the framework
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
     """Handle an options flow for the integration."""
-
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize options flow."""
-        self.config_entry = config_entry
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
