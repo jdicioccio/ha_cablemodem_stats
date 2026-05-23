@@ -73,8 +73,6 @@ except ImportError:
     async_unload_entry = _make_unavailable("async_unload_entry")
 
     class ArrisModemDataUpdateCoordinator:  # type: ignore[no-redef]
-        """Stub when Home Assistant is not installed."""
-
         def __init__(self, *args, **kwargs):
             raise RuntimeError(
                 "ArrisModemDataUpdateCoordinator requires Home Assistant. "
@@ -123,11 +121,6 @@ if HAS_HOME_ASSISTANT:
 
         return True
 
-
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Reload the config entry when options are updated."""
-    await hass.config_entries.async_reload(entry.entry_id)
-
     async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         """Unload a config entry."""
         unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
@@ -135,7 +128,11 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
             hass.data[DOMAIN].pop(entry.entry_id)
         return unload_ok
 
-    class ArrisModemDataUpdateCoordinator(DataUpdateCoordinator):  # type: ignore[no-redef]
+    async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+        """Reload the config entry when options are updated."""
+        await hass.config_entries.async_reload(entry.entry_id)
+
+    class ArrisModemDataUpdateCoordinator(DataUpdateCoordinator):
         """Class to manage fetching data from the modem."""
 
         def __init__(
