@@ -23,6 +23,10 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from . import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN, SUPPORTED_MODELS
 
+# Re-export for clarity in options flow
+from homeassistant import config_entries as _config_entries  # noqa: F401
+
+
 _LOGGER = logging.getLogger(__name__)
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
@@ -123,4 +127,74 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 }
             ),
             errors=errors,
-        ) 
+        )
+
+    @staticmethod
+    def async_get_options_flow(
+        config_entry: config_entries.ConfigEntry,
+    ) -> OptionsFlowHandler:
+        """Create the options flow for this integration."""
+        return OptionsFlowHandler(config_entry)
+
+
+class OptionsFlowHandler(config_entries.OptionsFlow):
+    """Handle an options flow for the integration."""
+
+    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+        """Initialize options flow."""
+        self.config_entry = config_entry
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Manage the options."""
+        if user_input is not None:
+            try:
+                await validate_input(self.hass, user_input)
+            except Exception:  # noqa: BLE001
+                _LOGGER.exception("Options validation failed")
+                return self.async_show_form(
+                    step_id="init",
+                    data_schema=self._get_schema(user_input),
+                    errors={"base": "cannot_connect"},
+                )
+
+            # Save into options (not data). This allows updating credentials etc.
+            return self.async_create_entry(title="", data=user_input)
+
+        # Pre-populate form with current values (options take precedence over data)
+        current = {**self.config_entry.data, **(self.config_entry.options or {})}
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=self._get_schema(current),
+        )
+
+    def _get_schema(self, current: dict[str, Any]) -> vol.Schema:
+        """Build the options form schema with current values as defaults."""
+        return vol.Schema(
+            {
+                vol.Required(
+                    CONF_HOST, default=current.get(CONF_HOST, "")
+                ): str,
+                vol.Required(
+                    CONF_MODEL, default=current.get(CONF_MODEL)
+                ): vol.In(SUPPORTED_MODELS),
+                vol.Optional(
+                    CONF_USERNAME, default=current.get(CONF_USERNAME, "")
+                ): str,
+                vol.Optional(
+                    CONF_PASSWORD, default=current.get(CONF_PASSWORD, "")
+                ): str,
+                vol.Optional(
+                    CONF_SSL, default=current.get(CONF_SSL, True)
+                ): bool,
+                vol.Optional(
+                    CONF_SCAN_INTERVAL,
+                    default=current.get(
+                        CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL.total_seconds()
+                    ),
+                ): vol.All(vol.Coerce(int), vol.Range(min=60)),
+            }
+        )
+ 

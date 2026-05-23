@@ -22,5 +22,25 @@
                 "title": "Arris/Motorola Cable Modem"
             }
         }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "host": "Host",
+                    "model": "Model",
+                    "username": "Username",
+                    "password": "Password",
+                    "ssl": "Use SSL",
+                    "scan_interval": "Update interval (seconds)"
+                },
+                "description": "Update connection settings for your cable modem. Changes will take effect immediately after saving.",
+                "title": "Cable Modem Options"
+            }
+        },
+        "error": {
+            "cannot_connect": "Failed to connect with the new settings",
+            "unknown": "Unexpected error"
+        }
     }
 } 

@@ -181,7 +181,9 @@ async def async_setup_entry(
         _LOGGER.debug("Found upstream channels: %s", upstream_channels)
     
     # Add downstream channel sensors
-    for channel in range(1, 33):  # Support up to 32 channels
+    # Support up to 48 channels to handle modern DOCSIS 3.1/4.0 modems
+    # (our real-world capture.html fixture has 34 downstream channels).
+    for channel in range(1, 49):
         for description in DOWNSTREAM_SENSORS:
             entities.append(
                 ArrisModemSensor(
@@ -193,7 +195,8 @@ async def async_setup_entry(
             )
 
     # Add upstream channel sensors
-    for channel in range(1, 9):  # Support up to 8 channels
+    # Support up to 12 upstream channels (future-proofing).
+    for channel in range(1, 13):
         for description in UPSTREAM_SENSORS:
             entities.append(
                 ArrisModemSensor(
